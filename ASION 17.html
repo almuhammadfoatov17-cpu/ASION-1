@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitoblar Olami</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#111;
+    color:white;
+}
+
+/* LOGIN PAGE */
+#loginPage{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,#0b1d3a,#5a0f0f,#333);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    animation:fadeIn 1.2s ease;
+}
+input{
+    padding:12px;
+    margin:10px;
+    border:none;
+    border-radius:10px;
+    width:250px;
+}
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background:#ff4d4d;
+    color:white;
+    transition:0.3s;
+}
+button:hover{
+    transform:scale(1.1);
+    background:#ff1a1a;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+/* MAIN */
+#main{
+    display:none;
+    padding:20px;
+}
+
+/* BOOK CARDS */
+.book{
+    background:#222;
+    border-radius:15px;
+    padding:15px;
+    margin:15px;
+    display:inline-block;
+    width:250px;
+    vertical-align:top;
+    transition:0.4s;
+    animation:slideUp 1s ease;
+}
+.book:hover{
+    transform:translateY(-10px) scale(1.03);
+}
+@keyframes slideUp{
+    from{transform:translateY(50px);opacity:0;}
+    to{transform:translateY(0);opacity:1;}
+}
+
+/* LIKE SAVE */
+.actions button{
+    margin:5px;
+    background:#444;
+}
+.actions button.active{
+    background:#00cc66;
+}
+
+/* RATING */
+.star{
+    font-size:20px;
+    cursor:pointer;
+    color:gray;
+}
+.star.active{
+    color:gold;
+}
+
+/* SOCIAL */
+.social{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+}
+.social a{
+    display:block;
+    margin:5px;
+    padding:10px;
+    border-radius:10px;
+    background:#0088cc;
+    color:white;
+    text-decoration:none;
+    transition:0.3s;
+}
+.social a:hover{
+    transform:scale(1.1);
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+    .book{
+        width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+    <h2>Ismingizni kiriting</h2>
+    <input type="text" id="name" placeholder="Ism">
+    <input type="text" id="surname" placeholder="Familya">
+    <button onclick="enterSite()">Kirish</button>
+</div>
+
+<!-- MAIN PAGE -->
+<div id="main">
+    <h1>📚 Kitoblar Olami</h1>
+    <div id="books"></div>
+</div>
+
+<!-- SOCIAL -->
+<div class="social">
+    <a href="https://t.me/Almuhamadd" target="_blank">Telegram</a>
+    <a href="https://www.instagram.com/ali_725__?igsh=MTJiOHVtOWZ6Ynd5cA==" target="_blank">Instagram</a>
+</div>
+
+<script>
+function enterSite(){
+    let name=document.getElementById("name").value;
+    let surname=document.getElementById("surname").value;
+
+    if(name=="" || surname==""){
+        alert("Ism va Familyani kiriting!");
+        return;
+    }
+
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("main").style.display="block";
+}
+
+/* BOOK DATA */
+let books=[
+    {title:"O‘tkan Kunlar",pdf:"https://share.google/op5yURQs4gVgFS2jB"},
+    {title:"Mehrobdan Chayon",pdf:"https://share.google/WRrXevigpDZS06jXp"},
+    {title:"Ikki Eshik Orasi",pdf:"https://share.google/IGNJEOj1cMhSAeK5P"},
+    {title:"Kecha va Kunduz",pdf:"https://share.google/xCJ86SvFPcvCOZ34q"},
+    {title:"Sariq Devni Minib",pdf:"https://share.google/4ooG1vMrZr6hqfYlE"},
+];
+
+/* CREATE BOOKS */
+let container=document.getElementById("books");
+
+books.forEach((b,i)=>{
+    let div=document.createElement("div");
+    div.className="book";
+
+    div.innerHTML=`
+    <h3>${b.title}</h3>
+    <a href="${b.pdf}" target="_blank"><button>📖 O‘qish</button></a>
+
+    <div class="actions">
+        <button onclick="likeBook(${i},this)">❤️ Like</button>
+        <button onclick="saveBook(${i},this)">💾 Save</button>
+    </div>
+    <div>
+        Baholash:
+        <span onclick="rate(${i},1,this)" class="star">★</span>
+        <span onclick="rate(${i},2,this)" class="star">★</span>
+        <span onclick="rate(${i},3,this)" class="star">★</span>
+        <span onclick="rate(${i},4,this)" class="star">★</span>
+        <span onclick="rate(${i},5,this)" class="star">★</span>
+    </div>
+    `;
+    container.appendChild(div);
+});
+
+/* LIKE */
+function likeBook(i,btn){
+    btn.classList.toggle("active");
+}
+
+/* SAVE */
+function saveBook(i,btn){
+    btn.classList.toggle("active");
+}
+
+/* RATING */
+function rate(book,star,el){
+    let stars=el.parentNode.querySelectorAll(".star");
+    stars.forEach((s,index)=>{
+        if(index<star){
+            s.classList.add("active");
+        }else{
+            s.classList.remove("active");
+        }
+    });
+}
+</script>
+
+</body>
+</html>
